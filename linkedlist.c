@@ -46,19 +46,39 @@ typedef struct Node {
 
 
 Node* new_node(int value) {
+  Node* new = checked_malloc(sizeof(Node));
+  new->value = value;
+  new->next = NULL;
+  return new;
 }
 
 
 void append(Node* head, int value) {
+  Node* new = new_node(value);
+  while (head->next) {
+    head = head->next;
+  }
+  head->next = new;
 }
 
 Node* insert(Node* head, int value) {
 }
 
 void print_list(Node* head) {
+  while (head) {
+    printf("%d\n", head->value);
+    head = head->next;
+  }
 }
 
 void free_list(Node* head) {
+  Node* nextUp = head->next;
+  while (nextUp) {
+    checked_free(head);
+    head = nextUp;
+    nextUp = head->next;
+  }
+  checked_free(head);
 }
 
 Node* reverse(Node* head) {
@@ -74,14 +94,15 @@ void demo_print() {
 
 void demo_append() {
   banner("Demo Append");
-  Node head = {1, NULL};
-  append(&head, 2);
-  append(&head, 3);
-  append(&head, 4);
-  append(&head, 5);
-  append(&head, 6);
-  print_list(&head);
-  // check_memory(TRUE);
+  Node *head = new_node(1);
+  append(head, 2);
+  append(head, 3);
+  append(head, 4);
+  append(head, 5);
+  append(head, 6);
+  print_list(head);
+  free_list(head);
+  check_memory(TRUE);
 }
 
 void demo_insert_part1() {
@@ -133,7 +154,7 @@ void demo_reverse() {
 int main() {
   demo_print();
   demo_append();
-  demo_insert_part1();
-  demo_insert_part2();
-  demo_reverse();
+  // demo_insert_part1();
+  // demo_insert_part2();
+  // demo_reverse();
 }
