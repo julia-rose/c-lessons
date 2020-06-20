@@ -11,5 +11,5 @@ stack_queue: stack_queue.c common.c
 clean:
 	rm strings linkedlist
 
-run: linkedlist
-	./linkedlist
+run: stack_queue
+	./stack_queue
