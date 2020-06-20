@@ -38,7 +38,6 @@ void banner(const char *str) {
 }
 
 
-
 typedef struct Node {
   int value;
   struct Node* next;
@@ -62,6 +61,22 @@ void append(Node* head, int value) {
 }
 
 Node* insert(Node* head, int value) {
+  /* add node containing value in ascending order
+   * return head node
+   */
+  Node* new = new_node(value);
+  Node* original_head = head;
+  if (new->value < head->value) {
+    new->next = head;
+    head = new;
+    return head;
+  }
+  while (head->next && head->next->value < new->value) {
+    head = head->next;
+  }
+  new->next = head->next;
+  head->next = new;
+  return original_head;
 }
 
 void print_list(Node* head) {
@@ -82,6 +97,16 @@ void free_list(Node* head) {
 }
 
 Node* reverse(Node* head) {
+  Node* prev = NULL;
+  Node* next = NULL;
+  while (head) {
+    next = head->next;
+    head->next = prev;
+    prev = head;
+    head = next;
+  }
+
+  return prev;
 }
 
 void demo_print() {
@@ -107,10 +132,10 @@ void demo_append() {
 
 void demo_insert_part1() {
   banner("Demo Insert (Part 1)");
-  Node *head = new_node(5);
+  Node *head = new_node(1);
 
   // create first node
-  insert(head, 1);
+  insert(head, 5);
   insert(head, 3);
   insert(head, 4);
   insert(head, 2);
@@ -122,10 +147,10 @@ void demo_insert_part1() {
 
 void demo_insert_part2() {
   banner("Demo Insert (Part 2)");
-  Node *head = new_node(1);
+  Node *head = new_node(5);
 
   // create first node
-  head = insert(head, 5);
+  head = insert(head, 1);
   head = insert(head, 3);
   head = insert(head, 4);
   head = insert(head, 2);
@@ -152,9 +177,9 @@ void demo_reverse() {
 
 
 int main() {
-  demo_print();
+  /*demo_print();
   demo_append();
-  // demo_insert_part1();
-  // demo_insert_part2();
-  // demo_reverse();
+  demo_insert_part1();
+  demo_insert_part2();*/
+  demo_reverse();
 }
