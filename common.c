@@ -2,23 +2,23 @@
 #include <stdlib.h>
 #include <malloc/malloc.h>
 
-static int bytes_allocated = 0;
-static int bytes_freed = 0;
+static int times_allocated = 0;
+static int times_freed = 0;
 
 void* checked_malloc(size_t bytes) {
-  bytes_allocated += bytes;
+  times_allocated += 1;
   return malloc(bytes);
 }
 
 void checked_free(void* ptr) {
-  bytes_freed += malloc_size(ptr);
+  times_freed += 1;
   free(ptr);
 }
 
 void check_memory(int reset) {
-  if(bytes_allocated != bytes_freed) {
+  if(times_allocated != times_freed) {
     printf("\033[0;31m"); // RED
-    printf("MEMORY LEAK: %d bytes allocated, %d bytes freed\n", bytes_allocated, bytes_freed);
+    printf("MEMORY LEAK: %d allocated, %d freed\n", times_allocated, times_freed);
     printf("\033[0m"); 
   } else {
     printf("\033[0;32m"); // GREEN
@@ -26,8 +26,8 @@ void check_memory(int reset) {
     printf("\033[0m"); 
   }
   if(reset) {
-    bytes_allocated = 0;
-    bytes_freed = 0;
+    times_allocated = 0;
+    times_freed = 0;
   }
 }
 
